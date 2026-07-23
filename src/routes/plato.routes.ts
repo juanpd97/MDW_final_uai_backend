@@ -1,6 +1,8 @@
 import { Router } from 'express';
-// authMiddleware protege las rutas que requieren autenticación (admin)
 import authMiddleware from '../middleware/auth.middleware';
+// validate ejecuta la validación con Joi antes de llegar al controlador
+import validate from '../middleware/validate';
+import { createPlatoSchema, updatePlatoSchema } from '../validations/plato.validation';
 import {
   getPublicPlatos,
   getAllPlatos,
@@ -12,13 +14,13 @@ import {
 
 const router = Router();
 
-// Rutas públicas (no requieren token)
+// Rutas públicas
 router.get('/publicos', getPublicPlatos);
 
-// Rutas protegidas (requieren token JWT en el header Authorization: Bearer <token>)
+// Rutas protegidas (requieren token JWT)
 router.get('/', authMiddleware, getAllPlatos);
-router.post('/', authMiddleware, createPlato);
-router.put('/:id', authMiddleware, updatePlato);
+router.post('/', authMiddleware, validate(createPlatoSchema), createPlato);
+router.put('/:id', authMiddleware, validate(updatePlatoSchema), updatePlato);
 router.patch('/:id/disponibilidad', authMiddleware, toggleDisponible);
 router.delete('/:id', authMiddleware, deletePlato);
 
