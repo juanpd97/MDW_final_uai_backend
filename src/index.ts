@@ -1,8 +1,11 @@
 import cors from 'cors';
 import express from 'express';
 import dotenv from 'dotenv';
+import router from './routes';
+import connectDB from './db';
 
 dotenv.config();
+connectDB();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -10,6 +13,8 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+app.use("/api", router);
 
 app.get('/', (_req, res) => {
   res.json({ message: 'Servidor funcionando correctamente' });
