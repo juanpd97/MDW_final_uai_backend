@@ -1,4 +1,6 @@
 import { Router } from 'express';
+// authMiddleware protege las rutas que requieren autenticación (admin)
+import authMiddleware from '../middleware/auth.middleware';
 import {
   getPublicPlatos,
   getAllPlatos,
@@ -10,11 +12,14 @@ import {
 
 const router = Router();
 
+// Rutas públicas (no requieren token)
 router.get('/publicos', getPublicPlatos);
-router.get('/', getAllPlatos);
-router.post('/', createPlato);
-router.put('/:id', updatePlato);
-router.patch('/:id/disponibilidad', toggleDisponible);
-router.delete('/:id', deletePlato);
+
+// Rutas protegidas (requieren token JWT en el header Authorization: Bearer <token>)
+router.get('/', authMiddleware, getAllPlatos);
+router.post('/', authMiddleware, createPlato);
+router.put('/:id', authMiddleware, updatePlato);
+router.patch('/:id/disponibilidad', authMiddleware, toggleDisponible);
+router.delete('/:id', authMiddleware, deletePlato);
 
 export default router;
