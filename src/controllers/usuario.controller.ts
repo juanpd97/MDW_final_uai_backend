@@ -30,7 +30,11 @@ export const register = asyncHandler(async (req: Request, res: Response) => {
     { expiresIn: '7d' },
   );
 
-  res.status(201).json({ message: 'Usuario registrado exitosamente', token });
+  res.status(201).json({
+    message: 'Usuario registrado exitosamente',
+    token,
+    usuario: { id: newUser._id, email: newUser.email },
+  });
 });
 
 // Inicia sesión: verifica credenciales y devuelve un token
@@ -57,5 +61,9 @@ export const login = asyncHandler(async (req: Request, res: Response) => {
     { expiresIn: '7d' },
   );
 
-  res.status(200).json({ message: 'Inicio de sesión exitoso', token });
+  res.status(200).json({
+    message: 'Inicio de sesión exitoso',
+    token,
+    usuario: { id: user._id, email: user.email },
+  });
 });
