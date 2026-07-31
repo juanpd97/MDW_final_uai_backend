@@ -36,8 +36,10 @@ app.use((_req, res) => {
 // Middleware de errores (debe ir al final)
 app.use(errorHandler);
 
-app.listen(PORT, () => {
-  console.log(`Servidor ejecutándose en puerto ${PORT}`);
-});
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`Servidor ejecutándose en puerto ${PORT}`);
+  });
+}
 
 export default app;
